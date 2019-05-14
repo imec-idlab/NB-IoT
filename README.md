@@ -1,6 +1,6 @@
 # NB-IoT
 
-This is the repository from Imec research group on development of NB-IoT features on NS-3 network simulator. These features includes:
+This is the repository from Imec research group on development of NB-IoT features on NS-3 network simulator. These features include:
 
 * Support of Multi-tone transmissions
 * Evaluation of PHY layer performance
@@ -8,9 +8,7 @@ This is the repository from Imec research group on development of NB-IoT feature
 * Limit modulation schemes to QPSK
 * Separating subframes for control and data channels
 * Power Saving features:
--- Discontinuous reception in RRC idle state (DRX)
--- Paging
--- Power saving mode (PSM)
+     Discontinuous reception in RRC idle state (DRX), Paging, Power saving mode (PSM)
 * Energy evaluation module
 
 ## Research papers published on the code evaluation
@@ -21,7 +19,7 @@ This is the repository from Imec research group on development of NB-IoT feature
 
 * AK Sultania, P Zand, C Blondia, J Famaey. Energy Modeling and Evaluation of NB-IoT with PSM and eDRX, 2018 IEEE Globecom Workshops (GC Wkshps), 2018 (https://www.researchgate.net/publication/329364141_Energy_Modeling_and_Evaluation_of_NB-IoT_with_PSM_and_eDRX)
 
-* Implementation of NB-IoT Power Saving Schemes in NS-3, in proceeding WNS3 workshop 2019 
+* AK Sultania, C Delgado, J Famaey. Implementation of NB-IoT Power Saving Schemes in NS-3, in proceeding WNS3 workshop 2019 
 
 If you use our work, you can cite our papers.
 
