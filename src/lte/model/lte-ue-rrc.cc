@@ -669,7 +669,6 @@ LteUeRrc::DoNotifyEnergyChange ()
 void LteUeRrc::DoSetFrameSubframe(uint32_t frame, uint32_t subframe)
 {
     NS_LOG_FUNCTION (this << frame << subframe);
-    int nt  =  10;
     m_frameNo = frame;
     m_subframeNo = subframe;
     if (m_pf == m_frameNo && m_po == m_subframeNo)
@@ -691,7 +690,7 @@ void LteUeRrc::DoSetFrameSubframe(uint32_t frame, uint32_t subframe)
         {
             m_ptw = m_ptw_d;
         }
-        NS_LOG_UNCOND( Simulator::Now().GetSeconds()<<" LteUeRrc::DoSetFrameSubframe "<<"m_t3324 "<<m_t3324<<"m_t3412 "<<m_t3412<<" m_ptw "<<m_ptw<<" m_hasReceivedPaging "<<m_hasReceivedPaging);
+        //NS_LOG_UNCOND( Simulator::Now().GetSeconds()<<" LteUeRrc::DoSetFrameSubframe "<<"m_t3324 "<<m_t3324<<"m_t3412 "<<m_t3412<<" m_ptw "<<m_ptw<<" m_hasReceivedPaging "<<m_hasReceivedPaging);
         if(m_ptw ==0)  //Paging
         {
             SwitchToState (SUSPEND_PAGING);
@@ -1492,6 +1491,7 @@ LteUeRrc::DoRecvRrcConnectionSetup (LteRrcSap::RrcConnectionSetup msg)
   switch (m_state)
     {
     case IDLE_CONNECTING:
+    case SUSPEND_PAGING:
       {
         ApplyRadioResourceConfigDedicated (msg.radioResourceConfigDedicated);
         m_connectionTimeout.Cancel ();
@@ -3661,11 +3661,12 @@ LteUeRrc::SwitchToState (State newState)
       case SUSPEND_PAGING:
           if(true == m_hasReceivedPaging)
           {
-              SwitchToState(CONNECTED_NORMALLY);
-
-              LteRrcSap::RrcConnectionReconfigurationCompleted msg;
-              msg.rrcTransactionIdentifier = m_lastRrcTransactionIdentifier;
-              m_rrcSapUser->SendRrcConnectionReconfigurationCompleted (msg);
+              LteRrcSap::RrcConnectionRequest msg;
+              msg.ueIdentity = m_imsi;
+              m_rrcSapUser->SendRrcConnectionRequest (msg);
+              m_connectionTimeout = Simulator::Schedule (m_t300,
+                                                         &LteUeRrc::ConnectionTimeout,
+                                                         this);
           }
           else if(m_t3324 <= 0 && false == m_hasReceivedPaging )
           {
@@ -3675,7 +3676,7 @@ LteUeRrc::SwitchToState (State newState)
           {
               SwitchToState(IDLE_SUSPEND);
           }
-
+          break;
       case IDLE_PSM:
 
            break;
