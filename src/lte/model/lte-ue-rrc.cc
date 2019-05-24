@@ -173,7 +173,7 @@ LteUeRrc::LteUeRrc ()
     m_po(0),
     m_t3324(0),
     m_t3412(0),
-    m_ptw(0),
+    m_edrx_cycle(0),
     m_gotpaging(false),
     m_requirepagingflag (true),
     m_lastUpdateTime (NanoSeconds (0.0)),
@@ -271,10 +271,10 @@ LteUeRrc::GetTypeId (void)
                     IntegerValue ( (10000)),
                     MakeIntegerAccessor (&LteUeRrc::m_t3412_d),
                     MakeIntegerChecker<int64_t> ())
-    .AddAttribute ("TPTW",
-              "Timer for the TPTW ",
+    .AddAttribute ("TeDRXC",
+              "Timer for the TeDRXC ",
               IntegerValue ( (0)),
-              MakeIntegerAccessor (&LteUeRrc::m_ptw_d),
+              MakeIntegerAccessor (&LteUeRrc::m_edrx_cycle_d),
               MakeIntegerChecker<int32_t> ())
     .AddTraceSource ("MibReceived",
                      "trace fired upon reception of Master Information Block",
@@ -684,14 +684,14 @@ void LteUeRrc::DoSetFrameSubframe(uint32_t frame, uint32_t subframe)
     if (IDLE_SUSPEND == m_state)
     {
         --m_t3324;
-        --m_ptw;
+        --m_edrx_cycle;
         --m_t3412;
-        if (m_ptw <0)
+        if (m_edrx_cycle <0)
         {
-            m_ptw = m_ptw_d;
+            m_edrx_cycle = m_edrx_cycle_d;
         }
-        //NS_LOG_UNCOND( Simulator::Now().GetSeconds()<<" LteUeRrc::DoSetFrameSubframe "<<"m_t3324 "<<m_t3324<<"m_t3412 "<<m_t3412<<" m_ptw "<<m_ptw<<" m_hasReceivedPaging "<<m_hasReceivedPaging);
-        if(m_ptw ==0)  //Paging
+        //NS_LOG_UNCOND( Simulator::Now().GetSeconds()<<" LteUeRrc::DoSetFrameSubframe "<<"m_t3324 "<<m_t3324<<"m_t3412 "<<m_t3412<<" m_edrx_cycle "<<m_edrx_cycle<<" m_hasReceivedPaging "<<m_hasReceivedPaging);
+        if(m_edrx_cycle ==0)  //Paging
         {
             SwitchToState (SUSPEND_PAGING);
             m_hasReceivedPaging = false;
@@ -3574,7 +3574,7 @@ LteUeRrc::SwitchToState (State newState)
           //TODO: Update from rrc reconfiguration
           m_t3324 = m_t3324_d;
           m_t3412 = m_t3412_d;
-          m_ptw   =  ((m_ptw_d));   // ptw ranges from 2.56 to 40.96 (2.56/16)
+          m_edrx_cycle   =  ((m_edrx_cycle_d));   // ptw ranges from 2.56 to 40.96 (2.56/16)
 
           two = MakeCallback(&EnergyModuleLte::Only_idle_decrease, &LEM);
           idleTime= ((Simulator::Now()-m_lastUpdateTime).GetNanoSeconds());
@@ -3612,7 +3612,7 @@ LteUeRrc::SwitchToState (State newState)
           //TODO: Update from rrc reconfiguration
           m_t3324 = m_t3324_d;
           m_t3412 = m_t3412_d;
-          m_ptw   = m_ptw_d;   // ptw ranges from 2.56 to 40.96 (2.56/16)
+          m_edrx_cycle   = m_edrx_cycle_d;   // ptw ranges from 2.56 to 40.96 (2.56/16)
           break;
 
       default:

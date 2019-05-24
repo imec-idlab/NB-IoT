@@ -497,7 +497,7 @@ LteHelper::SetCcPhyParams ( std::map< uint8_t, ComponentCarrier> ccMapParams)
 }
 
 NetDeviceContainer
-LteHelper::InstallEnbDevice (NodeContainer c, int32_t t3324, int64_t t3412, int32_t ptw, uint16_t rrc_release_timer, bool psm_enable)
+LteHelper::InstallEnbDevice (NodeContainer c, int32_t t3324, int64_t t3412, int32_t edrx_cycle, uint16_t rrc_release_timer, bool psm_enable)
 {
   NS_LOG_FUNCTION (this);
   Initialize ();  // will run DoInitialize () if necessary
@@ -505,21 +505,21 @@ LteHelper::InstallEnbDevice (NodeContainer c, int32_t t3324, int64_t t3412, int3
   for (NodeContainer::Iterator i = c.Begin (); i != c.End (); ++i)
     {
       Ptr<Node> node = *i;
-      Ptr<NetDevice> device = InstallSingleEnbDevice (node, t3324, t3412, ptw, rrc_release_timer, psm_enable);
+      Ptr<NetDevice> device = InstallSingleEnbDevice (node, t3324, t3412, edrx_cycle, rrc_release_timer, psm_enable);
       devices.Add (device);
     }
   return devices;
 }
 
 NetDeviceContainer
-LteHelper::InstallUeDevice (NodeContainer c, int32_t t3324, int64_t t3412, int32_t ptw)
+LteHelper::InstallUeDevice (NodeContainer c, int32_t t3324, int64_t t3412, int32_t edrx_cycle)
 {
   NS_LOG_FUNCTION (this);
   NetDeviceContainer devices;
   for (NodeContainer::Iterator i = c.Begin (); i != c.End (); ++i)
     {
       Ptr<Node> node = *i;
-      Ptr<NetDevice> device = InstallSingleUeDevice (node, t3324, t3412, ptw);
+      Ptr<NetDevice> device = InstallSingleUeDevice (node, t3324, t3412, edrx_cycle);
       devices.Add (device);
     }
   return devices;
@@ -527,7 +527,7 @@ LteHelper::InstallUeDevice (NodeContainer c, int32_t t3324, int64_t t3412, int32
 
 
 Ptr<NetDevice>
-LteHelper::InstallSingleEnbDevice (Ptr<Node> n, int32_t t3324, int64_t t3412, int32_t ptw, uint16_t rrc_release_timer, bool psm_enable)
+LteHelper::InstallSingleEnbDevice (Ptr<Node> n, int32_t t3324, int64_t t3412, int32_t edrx_cycle, uint16_t rrc_release_timer, bool psm_enable)
 {
 
   NS_ABORT_MSG_IF (m_cellIdCounter == 65535, "max num eNBs exceeded");
@@ -644,7 +644,7 @@ LteHelper::InstallSingleEnbDevice (Ptr<Node> n, int32_t t3324, int64_t t3412, in
     }
   rrc->SetAttribute ("T3324", IntegerValue (t3324));
   rrc->SetAttribute ("T3412", IntegerValue (t3412));
-  rrc->SetAttribute ("TPTW", IntegerValue (ptw));
+  rrc->SetAttribute ("TeDRXC", IntegerValue (edrx_cycle));
   rrc->SetAttribute("RrcReleaseInterval",UintegerValue(rrc_release_timer));
   rrc->SetAttribute("EnablePSM",BooleanValue(psm_enable));
 
@@ -781,7 +781,7 @@ LteHelper::InstallSingleEnbDevice (Ptr<Node> n, int32_t t3324, int64_t t3412, in
 }
 
 Ptr<NetDevice>
-LteHelper::InstallSingleUeDevice (Ptr<Node> n, int32_t t3324, int64_t t3412, int32_t ptw)
+LteHelper::InstallSingleUeDevice (Ptr<Node> n, int32_t t3324, int64_t t3412, int32_t edrx_cycle)
 {
   NS_LOG_FUNCTION (this);
 
@@ -904,7 +904,7 @@ LteHelper::InstallSingleUeDevice (Ptr<Node> n, int32_t t3324, int64_t t3412, int
       rrc->SetLteUeCmacSapProvider (it->second->GetMac ()->GetLteUeCmacSapProvider (), it->first);
       rrc->SetAttribute ("T3324", IntegerValue (t3324));
       rrc->SetAttribute ("T3412", IntegerValue (t3412));
-      rrc->SetAttribute ("TPTW", IntegerValue (ptw));
+      rrc->SetAttribute ("TeDRXC", IntegerValue (edrx_cycle));
 
       it->second->GetMac ()->SetLteUeCmacSapUser (rrc->GetLteUeCmacSapUser (it->first));
       it->second->GetMac ()->SetComponentCarrierId (it->first);

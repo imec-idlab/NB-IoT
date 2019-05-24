@@ -58,7 +58,7 @@ main (int argc, char *argv[])
 
   int32_t t3324 = 50*1024;  // Milliseconds
   int64_t t3412 = 10*1024;  // Milliseconds
-  int32_t ptw = 5*1024;  // Milliseconds
+  int32_t edrx_cycle = 5*1024;  // Milliseconds
   uint16_t rrc_release_timer = 10*1000; // Milliseconds
   bool psm_enable = true;
   uint16_t EnableRandom = 7;
@@ -76,7 +76,7 @@ main (int argc, char *argv[])
   cmd.AddValue("packetsize", "Packet size", packetsize);
   cmd.AddValue("t3324", " DRX timer", t3324); //<TODO: To connect maxmcs to lte-amc.cc>
   cmd.AddValue("t3412", "PSM timer", t3412);
-  cmd.AddValue("ptw", "Paging window", ptw);
+  cmd.AddValue("edrx_cycle", "edrx Cycle", edrx_cycle);
   cmd.AddValue("rrc_release_timer", "Connected timer", rrc_release_timer);
   cmd.AddValue("psm_enable", "PSM enabling flag", psm_enable);
   cmd.AddValue("maxmcs", "Maximum MCS", maxmcs);
@@ -148,8 +148,8 @@ main (int argc, char *argv[])
   mobility.Install(ueNodes);
   lteHelper->SetSchedulerType ("ns3::RrFfMacScheduler");
   // Install LTE Devices to the nodes
-  NetDeviceContainer enbLteDevs = lteHelper->InstallEnbDevice (enbNodes, t3324, t3412, ptw, rrc_release_timer, psm_enable);
-  NetDeviceContainer ueLteDevs = lteHelper->InstallUeDevice (ueNodes, t3324, t3412,ptw);
+  NetDeviceContainer enbLteDevs = lteHelper->InstallEnbDevice (enbNodes, t3324, t3412, edrx_cycle, rrc_release_timer, psm_enable);
+  NetDeviceContainer ueLteDevs = lteHelper->InstallUeDevice (ueNodes, t3324, t3412,edrx_cycle);
 
 
 

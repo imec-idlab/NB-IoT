@@ -20,7 +20,7 @@ def main():
             latency = {}
             latency_ul = {}
             t3412 = 0
-            ptw = 0
+            edrx_cycle = 0
             t3324 = 0
             filename = "logs/out"+str(file_num)+".txt"
             with open(filename) as f:
@@ -31,7 +31,7 @@ def main():
                         t3412 = (float((text.split(" ")[5]).split("ns")[0]) - float((text.split(" ")[3]).split("ns")[0]))/1000000000
                         if t3412<0:
                             t3412 = 0
-                        ptw = float((text.split(" ")[7]).split("ns")[0])/1000000000
+                        edrx_cycle = float((text.split(" ")[7]).split("ns")[0])/1000000000
                         t3324 = float((text.split(" ")[3]).split("ns")[0])/1000000000
                     if "m_total" in text:
                         rnti = text.split(" ")[1]
@@ -127,7 +127,7 @@ def main():
                             #print lastpsm
                         if "--> IDLE_SUSPEND" in text:
                             print text
-                            lastsuspend_d = float(text.split(" ")[0]) + ptw
+                            lastsuspend_d = float(text.split(" ")[0]) + edrx_cycle
                             lastsuspend = float(text.split(" ")[0])
                                 
                         if "LteEnbNetDevice::Send" in text:
@@ -300,10 +300,10 @@ def main():
             plt.plot((2.56,5.12,10.24,20.48,40.96), (psmval[countrnti]['totalenergy'][1122], psmval[countrnti]['totalenergy'][1122+6], psmval[countrnti]['totalenergy'][1122+12], psmval[countrnti]['totalenergy'][1122+18], psmval[countrnti]['totalenergy'][1122+24]) )
             
             plt.legend(['RRC_Inact=1', 'RRC_Inact=10', 'RRC_Inact=30','RRC_Inact=60'], loc='center right')
-            plt.xlabel('PTW')
+            plt.xlabel('eDRX_cycle')
             plt.ylabel('Average Consumed Energy per hour (in Joules)')
             plt.title('PSM timer = 614.4s')
-            fig.savefig("energy_E_PTW_RRC1.pdf")
+            fig.savefig("energy_E_eDRX_cycle_RRC1.pdf")
             plt.close()
                 #plt.show()
                 
@@ -318,10 +318,10 @@ def main():
             plt.plot((2.56,5.12,10.24,20.48,40.96), (psmval[countrnti]['latency_dl'][1122], psmval[countrnti]['latency_dl'][1122+6], psmval[countrnti]['latency_dl'][1122+12], psmval[countrnti]['latency_dl'][1122+18], psmval[countrnti]['latency_dl'][1122+24]) )
             
             plt.legend(['RRC_Inact=1', 'RRC_Inact=10', 'RRC_Inact=30','RRC_Inact=60'], loc='center right')
-            plt.xlabel('PTW')
+            plt.xlabel('eDRX_cycle')
             plt.ylabel('Average Consumed DL Latency (in seconds)')
             plt.title('PSM timer = 614.4s')
-            fig.savefig("latency_E_PTW_RRC1.pdf")
+            fig.savefig("latency_E_eDRX_cycle_RRC1.pdf")
             plt.close()
             #plt.show()
         

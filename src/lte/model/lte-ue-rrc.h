@@ -688,7 +688,7 @@ private:
   uint16_t  m_po;
   int32_t  m_t3324;
   int64_t  m_t3412;
-  int32_t  m_ptw;
+  int32_t  m_edrx_cycle;
   bool m_gotpaging;
 
   bool m_requirepagingflag;
@@ -1123,7 +1123,7 @@ private:
 
   int64_t m_t3412_d;
 
-  int32_t m_ptw_d;
+  int32_t m_edrx_cycle_d;
 
   /**
    * \brief Invokes ConnectionEstablishmentTimeout() if RRC connection

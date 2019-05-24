@@ -345,7 +345,7 @@ public:
    * \param c the node container where the devices are to be installed
    * \return the NetDeviceContainer with the newly created devices
    */
-  NetDeviceContainer InstallEnbDevice (NodeContainer c, int32_t t3324 = 0, int64_t t3412 = 10000, int32_t ptw = 0, uint16_t rrc_release_timer = 10000, bool psm_enable = true);
+  NetDeviceContainer InstallEnbDevice (NodeContainer c, int32_t t3324 = 0, int64_t t3412 = 10000, int32_t edrx_cycle = 0, uint16_t rrc_release_timer = 10000, bool psm_enable = true);
 
   /**
    * Create a set of UE devices.
@@ -353,7 +353,7 @@ public:
    * \param c the node container where the devices are to be installed
    * \return the NetDeviceContainer with the newly created devices
    */
-  NetDeviceContainer InstallUeDevice (NodeContainer c, int32_t t3324 = 0, int64_t t3412 = 10000, int32_t ptw = 0);
+  NetDeviceContainer InstallUeDevice (NodeContainer c, int32_t t3324 = 0, int64_t t3412 = 10000, int32_t edrx_cycle = 0);
 
   /**
    * \brief Enables automatic attachment of a set of UE devices to a suitable
@@ -693,14 +693,14 @@ private:
    * \param n the node where the device is to be installed
    * \return pointer to the created device
    */
-  Ptr<NetDevice> InstallSingleEnbDevice (Ptr<Node> n, int32_t t3324, int64_t t3412, int32_t ptw, uint16_t rrc_release_timer, bool psm_enable);
+  Ptr<NetDevice> InstallSingleEnbDevice (Ptr<Node> n, int32_t t3324, int64_t t3412, int32_t edrx_cycle, uint16_t rrc_release_timer, bool psm_enable);
 
   /**
    * Create a UE device (LteUeNetDevice) on the given node
    * \param n the node where the device is to be installed
    * \return pointer to the created device
    */
-  Ptr<NetDevice> InstallSingleUeDevice (Ptr<Node> n, int32_t t3324, int64_t t3412, int32_t ptw);
+  Ptr<NetDevice> InstallSingleUeDevice (Ptr<Node> n, int32_t t3324, int64_t t3412, int32_t edrx_cycle);
 
   /**
    * The actual function to trigger a manual handover.

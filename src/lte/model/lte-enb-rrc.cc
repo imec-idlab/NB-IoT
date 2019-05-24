@@ -158,7 +158,7 @@ UeManager::UeManager (Ptr<LteEnbRrc> rrc, uint16_t rnti, State s)
     m_pendingStartDataRadioBearers (false),
     m_t3324(0),
     m_t3412(0),
-    m_ptw(0),
+    m_edrx_cycle(0),
     m_datareceived(false)
 { 
   NS_LOG_FUNCTION (this);
@@ -1020,9 +1020,9 @@ UeManager::RecvRrcConnectionSetupCompleted (LteRrcSap::RrcConnectionSetupComplet
       m_rrc->m_connectionEstablishedTrace (m_imsi, m_rrc->m_cellId, m_rnti);
       m_t3324 =  (MilliSeconds (m_rrc->m_t3324_d));    // Multiple of 10.24 up-to 1090*10.24
       m_t3412 =  (MilliSeconds (m_rrc->m_t3412_d));
-      m_ptw   =  (MilliSeconds (m_rrc->m_ptw_d));   // ptw ranges from 2.56 to 40.96 (2.56/16)
+      m_edrx_cycle   =  (MilliSeconds (m_rrc->m_edrx_cycle_d));   // ptw ranges from 2.56 to 40.96 (2.56/16)
 
-      std::cout<<Simulator::Now().GetSeconds()<<" "<<m_rnti<< " T3324: "<< m_t3324<< " T3412: "<<m_t3412<<" PTW: "<<m_ptw<<std::endl;
+      std::cout<<Simulator::Now().GetSeconds()<<" "<<m_rnti<< " T3324: "<< m_t3324<< " T3412: "<<m_t3412<<" eDRX_cycle: "<<m_edrx_cycle<<std::endl;
       break;
 
     case CONNECTION_PSM:
@@ -1778,10 +1778,10 @@ LteEnbRrc::GetTypeId (void)
                   IntegerValue ( (10000)),
                   MakeIntegerAccessor (&LteEnbRrc::m_t3412_d),
                   MakeIntegerChecker<int64_t> ())
-    .AddAttribute ("TPTW",
-              "Timer for the TPTW ",
+    .AddAttribute ("TeDRXC",
+              "Timer for the TeDRXC ",
               IntegerValue ( (0)),
-              MakeIntegerAccessor (&LteEnbRrc::m_ptw_d),
+              MakeIntegerAccessor (&LteEnbRrc::m_edrx_cycle_d),
               MakeIntegerChecker<int32_t> ())
     .AddAttribute ("RrcReleaseInterval",
               "Rrc Release Interval in ms",

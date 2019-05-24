@@ -573,7 +573,7 @@ private:
 
   Time m_t3412;
 
-  Time m_ptw;
+  Time m_edrx_cycle;
 
   bool m_datareceived;
 
@@ -1486,7 +1486,7 @@ private:
 
   int64_t m_t3412_d;
 
-  int32_t m_ptw_d;
+  int32_t m_edrx_cycle_d;
 
   uint16_t m_rrcreleaseinterval_d;
 
