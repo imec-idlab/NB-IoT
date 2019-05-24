@@ -36,10 +36,10 @@ gcc_min_version = (4, 9, 2)
 # Bug 2181:  clang warnings about unused local typedefs and potentially
 # evaluated expressions affecting darwin clang/LLVM version 7.0.0 (Xcode 7)
 # or clang/LLVM version 3.6 or greater.  We must make this platform-specific.
-darwin_clang_version_warn_unused_local_typedefs = (7, 0, 0)
-darwin_clang_version_warn_potentially_evaluated = (7, 0, 0)
-clang_version_warn_unused_local_typedefs = (3, 6, 0)
-clang_version_warn_potentially_evaluated = (3, 6, 0)
+darwin_clang_version_warn_unused_local_typedefs = ('7', '0', '0')
+darwin_clang_version_warn_potentially_evaluated = ('7', '0', '0')
+clang_version_warn_unused_local_typedefs = ('3', '6', '0')
+clang_version_warn_potentially_evaluated = ('3', '6', '0')
 
 # Get the information out of the NS-3 configuration file.
 config_file_exists = False
@@ -424,14 +424,14 @@ def configure(conf):
     # bug 2181 on clang warning suppressions
     if conf.env['CXX_NAME'] in ['clang']:
         if Utils.unversioned_sys_platform() == 'darwin':
-            if tuple(map(int, conf.env['CC_VERSION'])) >= darwin_clang_version_warn_unused_local_typedefs:
+            if conf.env['CC_VERSION'] >= darwin_clang_version_warn_unused_local_typedefs:
                 env.append_value('CXXFLAGS', '-Wno-unused-local-typedefs')
-            if tuple(map(int, conf.env['CC_VERSION'])) >= darwin_clang_version_warn_potentially_evaluated:
+            if conf.env['CC_VERSION'] >= darwin_clang_version_warn_potentially_evaluated: 
                 env.append_value('CXXFLAGS', '-Wno-potentially-evaluated-expression')
         else:
-            if tuple(map(int, conf.env['CC_VERSION'])) >= clang_version_warn_unused_local_typedefs:
+            if conf.env['CC_VERSION'] >= clang_version_warn_unused_local_typedefs:
                 env.append_value('CXXFLAGS', '-Wno-unused-local-typedefs')
-            if tuple(map(int, conf.env['CC_VERSION'])) >= clang_version_warn_potentially_evaluated:
+            if conf.env['CC_VERSION'] >= clang_version_warn_potentially_evaluated: 
                 env.append_value('CXXFLAGS', '-Wno-potentially-evaluated-expression')
     env['ENABLE_STATIC_NS3'] = False
     if Options.options.enable_static:
@@ -456,19 +456,6 @@ def configure(conf):
         env.append_value('CXXFLAGS', Options.options.cxx_standard)
     else:
         Logs.warn("CXX Standard flag " + Options.options.cxx_standard + " was not recognized, using compiler's default")
-
-    # Find Boost libraries by modules
-    conf.env['REQUIRED_BOOST_LIBS'] = []
-    for modules_dir in ['src', 'contrib']:
-        conf.recurse (modules_dir, name="get_required_boost_libs", mandatory=False)
-
-    if conf.env['REQUIRED_BOOST_LIBS'] is not []:
-        conf.load('boost')
-        conf.check_boost(lib=' '.join (conf.env['REQUIRED_BOOST_LIBS']), mandatory=False)
-        if not conf.env['LIB_BOOST']:
-            conf.check_boost(lib=' '.join (conf.env['REQUIRED_BOOST_LIBS']), libpath="/usr/lib64", mandatory=False)
-            if not conf.env['LIB_BOOST']:
-                conf.env['LIB_BOOST'] = []
 
     # Set this so that the lists won't be printed at the end of this
     # configure command.
