@@ -12,6 +12,7 @@ This is the repository from Imec research group on development of NB-IoT feature
 -- Paging
 -- Power saving mode (PSM)
 * Energy evaluation module
+* Update with ns-3.29
 
 ## Research papers published on the code evaluation
 
