@@ -1,15 +1,22 @@
 # NB-IoT
 
-This is the repository from Imec research group on development of NB-IoT features on NS-3 network simulator. These features include:
+This is the repository from Imec research group on development of NB-IoT features on ns-3 network simulator. It consists of two branches namely **energy_evaluation** and **repetition_coverage**. 
 
+The main features that are included in branch **repetition_coverage** are as follows:
 * Support of Multi-tone transmissions
 * Evaluation of PHY layer performance
 * Adapt the number of RB to one
 * Limit modulation schemes to QPSK
 * Separating subframes for control and data channels
+
+The main features that are included in branch **energy_evaluation** are as follows:
 * Power Saving features:
-     Discontinuous reception in RRC idle state (DRX), Paging, Power saving mode (PSM)
+-- Discontinuous reception in RRC idle state (DRX)
+-- Paging
+-- Power saving mode (PSM)
 * Energy evaluation module
+* Updates with ns-3.29
+* Merged the code of branch repeatition_coverage so this branch
 
 ## Research papers published on the code evaluation
 
@@ -19,18 +26,18 @@ This is the repository from Imec research group on development of NB-IoT feature
 
 * AK Sultania, P Zand, C Blondia, J Famaey. Energy Modeling and Evaluation of NB-IoT with PSM and eDRX, 2018 IEEE Globecom Workshops (GC Wkshps), 2018 (https://www.researchgate.net/publication/329364141_Energy_Modeling_and_Evaluation_of_NB-IoT_with_PSM_and_eDRX)
 
-* AK Sultania, C Delgado, J Famaey. Implementation of NB-IoT Power Saving Schemes in NS-3, in proceeding WNS3 workshop 2019 
+* AK Sultania, C Delgado, J Famaey. Implementation of NB-IoT Power Saving Schemes in ns-3. In 2019 Workshop on Next-Generation Wireless with ns-3 (WNGW 2019), June 21, 2019, Florence, Italy.ACM, New York, NY, USA, 4 pages. (https://www.researchgate.net/publication/333632115_Implementation_of_NB-IoT_Power_Saving_Schemes_in_ns-3)
 
 If you use our work, you can cite our papers.
 
 
 ### Prerequisites
 
-Check NS-3 page for more information
+Check ns-3 page for more information
 
 ## Test Scripts
 
-Few test scripts are present in scratch folder and /lte/examples. 
+Few test scripts are present in scratch folder and `/lte/examples`. 
 
 ## Authors
 
