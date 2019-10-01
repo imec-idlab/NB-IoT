@@ -573,7 +573,7 @@ def animate3(i):
             
                         
         
-        print (ue_data[str(rnti)]['1'][0], ue_data[str(rnti)]['2'][0], ue_data[str(rnti)]['4'][0],ue_data[str(rnti)]['3'][0],ue_data[str(rnti)]['5'][0],ue_data[str(rnti)]['6'][0] )
+        #print (ue_data[str(rnti)]['1'][0], ue_data[str(rnti)]['2'][0], ue_data[str(rnti)]['4'][0],ue_data[str(rnti)]['3'][0],ue_data[str(rnti)]['5'][0],ue_data[str(rnti)]['6'][0] )
 
     #print (ue_data_end)
 
@@ -644,21 +644,21 @@ def animate2(i):
  
     
     ul,dl,t = calculate_l(dataList)
-
-    with open("td0.txt") as f1:
-        line = f1.readline()
-        text = line.strip()
-        while line:
-            if "AverageDLdelay:" in text:
-                if text.split(" ")[1] is "NAN":
-                    val1 = -1
-                else:
-                    val1 = float(text.split(" ")[1])
-                if val1 != dldelaylist[-1]:
-                    dldelaylist = [val1]
-        
+    if os.path.isfile('td0.txt') == True:
+        with open("td0.txt") as f1:
             line = f1.readline()
-    f1.close()
+            text = line.strip()
+            while line:
+                if "AverageDLdelay:" in text:
+                    if text.split(" ")[1] is "NAN":
+                        val1 = -1
+                    else:
+                        val1 = float(text.split(" ")[1])
+                    if val1 != dldelaylist[-1]:
+                        dldelaylist = [val1]
+            
+                line = f1.readline()
+        f1.close()
 
 
     #print (xList2,yList2,zList2)
@@ -702,21 +702,21 @@ def animate(i):
    
     
     dtime, dener = calculate_e(dataList)
-
-    with open("td0.txt") as f1:
-        line = f1.readline()
-        text = line.strip()
-        while line:
-            if "AverageEnergy" in text:
-                if text.split(" ")[1] is "NAN":
-                    val2 = -1
-                else:
-                    val2 = float(text.split(" ")[1])
-                    print (val2)
-                if val2 != energylist[-1]:
-                    energylist = [val1]
+    if os.path.isfile('td0.txt') == True:
+        with open("td0.txt") as f1:
             line = f1.readline()
-    f1.close()
+            text = line.strip()
+            while line:
+                if "AverageEnergy" in text:
+                    if text.split(" ")[1] is "NAN":
+                        val2 = -1
+                    else:
+                        val2 = float(text.split(" ")[1])
+                        print (val2)
+                    if val2 != energylist[-1]:
+                        energylist = [val1]
+                line = f1.readline()
+        f1.close()
     
     
     #print ("dtime, dener")
