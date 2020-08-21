@@ -952,42 +952,6 @@ UeManager::RecvRrcConnectionRequest (LteRrcSap::RrcConnectionRequest msg)
             SwitchToState (CONNECTION_REJECTED);
           }
       }
-        break;
-    case CONNECTION_PSM:
-    case CONNECTION_SUSPEND:
-        {
-            m_connectionRequestTimeout.Cancel ();
-
-            if (m_rrc->m_admitRrcConnectionRequest == true)
-              {
-                m_imsi = msg.ueIdentity;
-
-                // send RRC CONNECTION SETUP to UE
-                LteRrcSap::RrcConnectionSetup msg2;
-                msg2.rrcTransactionIdentifier = GetNewRrcTransactionIdentifier ();
-                msg2.radioResourceConfigDedicated = BuildRadioResourceConfigDedicated ();
-                m_rrc->m_rrcSapUser->SendRrcConnectionSetup (m_rnti, msg2);
-
-                RecordDataRadioBearersToBeStarted ();
-                m_connectionSetupTimeout = Simulator::Schedule (
-                    m_rrc->m_connectionSetupTimeoutDuration,
-                    &LteEnbRrc::ConnectionSetupTimeout, m_rrc, m_rnti);
-              }
-            else
-              {
-                    std::cout<<"rejecting connection request for RNTI " << m_rnti<<std::endl;
-
-                // send RRC CONNECTION REJECT to UE
-                LteRrcSap::RrcConnectionReject rejectMsg;
-                rejectMsg.waitTime = 3;
-                m_rrc->m_rrcSapUser->SendRrcConnectionReject (m_rnti, rejectMsg);
-
-                m_connectionRejectedTimeout = Simulator::Schedule (
-                    m_rrc->m_connectionRejectedTimeoutDuration,
-                    &LteEnbRrc::ConnectionRejectedTimeout, m_rrc, m_rnti);
-              }
-        }
-
       break;
 
     default:
@@ -1098,6 +1062,11 @@ UeManager::RecvRrcConnectionReconfigurationCompleted (LteRrcSap::RrcConnectionRe
       }
       break;
 
+    case CONNECTION_PSM:
+    case CONNECTION_SUSPEND:
+        SwitchToState(CONNECTED_NORMALLY);
+        m_rrc->SendData(NULL);
+        break;
     default:
       NS_FATAL_ERROR ("method unexpected in state " << ToString (m_state));
       break;

@@ -1491,7 +1491,6 @@ LteUeRrc::DoRecvRrcConnectionSetup (LteRrcSap::RrcConnectionSetup msg)
   switch (m_state)
     {
     case IDLE_CONNECTING:
-    case SUSPEND_PAGING:
       {
         ApplyRadioResourceConfigDedicated (msg.radioResourceConfigDedicated);
         m_connectionTimeout.Cancel ();
@@ -3661,12 +3660,11 @@ LteUeRrc::SwitchToState (State newState)
       case SUSPEND_PAGING:
           if(true == m_hasReceivedPaging)
           {
-              LteRrcSap::RrcConnectionRequest msg;
-              msg.ueIdentity = m_imsi;
-              m_rrcSapUser->SendRrcConnectionRequest (msg);
-              m_connectionTimeout = Simulator::Schedule (m_t300,
-                                                         &LteUeRrc::ConnectionTimeout,
-                                                         this);
+              SwitchToState(CONNECTED_NORMALLY);
+
+              LteRrcSap::RrcConnectionReconfigurationCompleted msg;
+              msg.rrcTransactionIdentifier = m_lastRrcTransactionIdentifier;
+              m_rrcSapUser->SendRrcConnectionReconfigurationCompleted (msg);
           }
           else if(m_t3324 <= 0 && false == m_hasReceivedPaging )
           {
